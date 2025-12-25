@@ -1,10 +1,13 @@
-﻿use std::{
+﻿#![windows_subsystem = "windows"]
+
+use std::{
     sync::atomic::{AtomicBool, Ordering},
     thread,
     time::Duration,
 };
 
 use windows::{
+    core::w,
     Win32::{
         Foundation::*,
         UI::{
@@ -13,6 +16,43 @@ use windows::{
         },
     },
 };
+
+use windows::Win32::Foundation::{HANDLE, GetLastError, ERROR_ALREADY_EXISTS, CloseHandle};
+use windows::Win32::System::Threading::CreateMutexW;
+use windows::Win32::UI::WindowsAndMessaging::{MessageBoxW, MB_OK, MB_ICONWARNING};
+
+fn single_instance() -> bool {
+    unsafe {
+        let mutex_name = w!("MY_G102_CS_CLICK");
+        
+        // 1. CreateMutexW 回傳的是 Result，需要解包
+        // 如果建立失敗 (例如系統資源不足)，這裡會直接 panic 或回傳錯誤，這裡簡化處理
+        let result = CreateMutexW(None, false, mutex_name);
+
+        match result {
+            Ok(handle) => {
+                // 2. 檢查 GetLastError 是否為 ERROR_ALREADY_EXISTS
+                // 即使 CreateMutexW 回傳 Ok，如果是開啟現有的 Mutex，也會設定這個 Error Code
+                if GetLastError() == ERROR_ALREADY_EXISTS {
+                    // 已有實例在執行，這裡讓 handle 自動 Drop (CloseHandle) 即可
+                    return false;
+                }
+
+                // 3. 【關鍵修正】
+                // 為了讓 Mutex 在整個程式執行期間都有效，
+                // 我們必須告訴 Rust "忘記" 釋放這個 handle。
+                // 否則函式一結束，handle 被 drop，Mutex 就消失了。
+                std::mem::forget(handle);
+                
+                true
+            }
+            Err(_) => {
+                // 建立 Mutex 發生系統錯誤
+                false
+            }
+        }
+    }
+}
 
 // 修正 1: HHOOK 初始化時，0 必須轉型為指標 (0 as _)
 //static mut H_HOOK: HHOOK = HHOOK(0 as _);
@@ -25,6 +65,15 @@ fn hiword(val: u32) -> u16 {
 }
 
 fn main() {
+
+    if !single_instance() {
+        // 顯示 alert
+        unsafe {
+            MessageBoxW(None, w!("程式已經在執行中！"), w!("提示"), MB_OK | MB_ICONWARNING);
+        }
+        return;
+    }
+
     let hook = unsafe {
         SetWindowsHookExW(
             WH_MOUSE_LL,
