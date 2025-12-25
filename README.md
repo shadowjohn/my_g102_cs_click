@@ -14,4 +14,6 @@ git clone https://github.com/shadowjohn/my_g102_cs_click
 cd my_g102_cs_click
 cargo build --release
 
-4️. 按住 G102 側鍵（Mouse4）即可連點 🎯，必要時可用右鍵以系統管理員權限執行
+4️. 
+執行 target/release/my_g102_cs_click.exe
+按住 G102 左後側鍵（XBUTTON1）即可連點觸發左鍵 10ms 速度開槍
