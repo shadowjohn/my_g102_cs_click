@@ -5,6 +5,7 @@ my_g102_cs_click
 輕量級滑鼠連點工具，專為 Counter-Strike (CS) 設計。
 主要目的是取代龐大的 Logitech G Hub 軟體，提供更低延遲、更節省資源的側鍵連點方案。
 
+
 ✨ 特色
 
 極致輕量：使用 Rust 編寫，無須安裝肥大的驅動程式。
@@ -12,10 +13,12 @@ my_g102_cs_click
 隱藏式執行：背景運作，不佔用視窗空間。
 單一執行檔：編譯後僅需一個 .exe 即可在任何 Windows 電腦上執行。
 
+
 🛠️ 前置需求
 
 作業系統：Windows 10 / 11
 Rust 環境：可至官網安裝 rustup.rs
+
 
 🚀 快速開始
 
@@ -25,26 +28,36 @@ cd my_g102_cs_click
 
 2. 編譯專案
 建議使用 release 模式以獲得最佳效能與最小體積：
+
 cargo build --release
 
 或可直接使用提供的 release.bat 編譯。
 
 3. 執行程式
 編譯完成後的執行檔位於 target/release/ 資料夾中：
+
 .\target\release\my_g102_cs_click.exe
+
 
 🎮 使用方式
 
 按住滑鼠左側靠後的側鍵 XBUTTON1
+
 功能：自動以 10ms 間隔 觸發左鍵點擊（適合手槍局或連點槍枝）
+
 關閉程式：開啟工作管理員，結束 my_g102_cs_click.exe 工作
+
 
 ⚠️ 常見問題與故障排除
 
 Q: 按下側鍵沒有反應？
+
 A: 請檢查電腦是否安裝了 Logitech G Hub。
+
 G Hub 可能會攔截側鍵訊號並轉為鍵盤訊號。
+
 建議完全關閉 G Hub，或使用 Logitech Onboard Memory Manager 將側鍵恢復為預設。
+
 
 🛑 免責聲明 (Disclaimer)
 
