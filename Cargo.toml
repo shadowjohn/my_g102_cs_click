@@ -2,6 +2,13 @@
 name = "my_g102_cs_click"
 version = "0.1.0"
 edition = "2021"
+build = "build.rs"
+
+[build-dependencies]
+base64 = "0.22"
+image = "0.25"
+ico = "0.3"
+embed-resource = "2.4"
 
 [dependencies]
 tray-icon = "0.11"
