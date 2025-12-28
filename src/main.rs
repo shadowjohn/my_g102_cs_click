@@ -164,10 +164,11 @@ fn main() {
     })));
 
     // 一定要有 event loop
-    let event_loop = EventLoop::new();
+    /*let event_loop = EventLoop::new();
     event_loop.run(move |_, _, control| {
         *control = ControlFlow::Wait;
     });
+    */
 
     let hook = unsafe {
         SetWindowsHookExW(
