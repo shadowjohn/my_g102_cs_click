@@ -33,10 +33,12 @@ Rust 環境：可至官網安裝 rustup.rs
 🚀 快速開始
 
 1. 下載專案
+2. 
 git clone https://github.com/shadowjohn/my_g102_cs_click
+
 cd my_g102_cs_click
 
-2. 編譯專案
+3. 編譯專案
 建議使用 release 模式以獲得最佳效能與最小體積：
 
 cargo build --release
@@ -53,7 +55,7 @@ cargo build --release
 
 按住滑鼠左側靠後的側鍵 XBUTTON1
 
-功能：自動以 10ms 間隔 觸發左鍵點擊（適合手槍局或連點槍枝）
+功能：自動以 20ms 間隔 觸發左鍵點擊（適合手槍局或連點槍枝）
 
 關閉程式：開啟工作管理員，結束 my_g102_cs_click.exe 工作
 
