@@ -207,31 +207,28 @@ extern "system" fn mouse_proc(code: i32, wparam: WPARAM, lparam: LPARAM) -> LRES
         unsafe {
             let mouse = *(lparam.0 as *const MSLLHOOKSTRUCT);
             let is_injected = (mouse.flags & 0x01) != 0;
-            
+
             if !is_injected {
                 match wparam.0 as u32 {
                     WM_XBUTTONDOWN => {
                         let button = hiword(mouse.mouseData);
-                        // 印出按下的按鍵代號，方便你確認
-                        println!("偵測到側鍵按下，代號 (XBUTTON): {}", button);
 
-                        // 修改這裡：判斷 XBUTTON1 或 XBUTTON2
-                        // 如果你想兩顆鍵都能觸發，就用 || (OR)
-                        if button == XBUTTON1 as u16  {
-                            //|| button == XBUTTON2 as u16
-                            println!("-> 啟動連點");
+                        if button == XBUTTON1 as u16 {
+                            // 啟動連點
                             CLICKING.store(true, Ordering::Relaxed);
+
+                            // ⭐ 關鍵：直接攔掉
+                            return LRESULT(1);
                         }
                     }
+
                     WM_XBUTTONUP => {
                         let button = hiword(mouse.mouseData);
-                        
-                        // 同樣監聽放開事件
-                        if button == XBUTTON1 as u16  {
-                            //|| button == XBUTTON2 as u16
-                            println!("-> 停止連點");
+
+                        if button == XBUTTON1 as u16 {
                             CLICKING.store(false, Ordering::Relaxed);
-							// 攔截側鍵事件，阻止預設的返回上頁功能
+
+                            // ⭐ 這裡也攔
                             return LRESULT(1);
                         }
                     }
