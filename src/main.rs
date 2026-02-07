@@ -74,7 +74,7 @@ static CLICKING: AtomicBool = AtomicBool::new(false);
 
 
 // ---------- Static text ----------
-const VERSION: &str = "0.0.2";
+const VERSION: &str = "0.0.3";
 
 static STR_ABOUT: Lazy<String> = Lazy::new(|| {
     format!(
@@ -231,6 +231,8 @@ extern "system" fn mouse_proc(code: i32, wparam: WPARAM, lparam: LPARAM) -> LRES
                             //|| button == XBUTTON2 as u16
                             println!("-> 停止連點");
                             CLICKING.store(false, Ordering::Relaxed);
+							// 攔截側鍵事件，阻止預設的返回上頁功能
+                            return LRESULT(1);
                         }
                     }
                     _ => {}
